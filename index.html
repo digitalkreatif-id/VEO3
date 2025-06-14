@@ -70,7 +70,7 @@
         </div>
         <div>
           <label for="negative" class="font-semibold">Negative Prompt</label>
-          <textarea id="negative" rows="2" placeholder="Hindari: teks di layar, distorsi, glitch..." class="mt-1 w-full px-3 py-2 border rounded"></textarea>
+          <textarea id="negative" rows="2" class="mt-1 w-full px-3 py-2 border rounded">Hindari: teks di layar, subtitle, tulisan di video, font, logo, distorsi, artefak, anomali, wajah ganda, anggota badan cacat, tangan tidak normal, orang tambahan, objek mengganggu, kualitas rendah, buram, glitch, suara robotik, suara pecah.</textarea>
         </div>
 
         <!-- Buttons -->
@@ -91,6 +91,16 @@
       <div>
         <h2 class="font-semibold mb-2">Prompt English (read-only)</h2>
         <textarea id="outputEN" rows="16" class="w-full p-3 border rounded bg-gray-50" readonly placeholder="Prompt will appear here..."></textarea>
+      </div>
+      <!-- Guidance Note -->
+      <div class="mt-6 text-sm text-gray-700 bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
+        <h3 class="font-semibold mb-2">Panduan Variasi Scene dengan ChatGPT</h3>
+        <p>Ingin membuat scene lanjutan dengan cepat? Salin instruksi di bawah ke ChatGPT:</p>
+        <pre class="whitespace-pre-wrap bg-white rounded p-3 mt-2 text-xs">
+HASILKAN PROMPT BARU DENGAN CERITA YANG BERBEDA
+Tolong ganti <i>cerita</i>, <i>karakter</i>, dan <i>lokasi</i> tanpa mengubah format prompt (lihat contoh).
+Buatkan scene berikutnya—cukup ubah pergerakan kamera, dialog karakter, serta latar tempat & waktu untuk menjaga konsistensi.</pre>
+        <p class="mt-2">Setelah ChatGPT memberikan prompt baru, tempel kembali ke kolom aplikasi ini dan klik <strong>Generate Prompt</strong> untuk otomatis diterjemahkan.</p>
       </div>
     </section>
   </main>
