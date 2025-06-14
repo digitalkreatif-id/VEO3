@@ -12,8 +12,7 @@ Generator prompt untuk model video **Veo 3**. Aplikasi bersifat **static** (HTML
    • Kolom Bahasa Indonesia (dapat diedit)  
    • Kolom English Final (*read-only*, otomatis terjemahan, dialog tetap ID).  
 4. Tombol **Reset** mengosongkan semua input & output.  
-5. Kontrol warna dinamis (Primary / Secondary / Accent) memakai utilitas Tailwind.  
-6. Desain responsif, bebas kuota—seluruh logika berjalan di sisi klien.
+5. Desain responsif, bebas kuota—seluruh logika berjalan di sisi klien.
 
 ---
 
