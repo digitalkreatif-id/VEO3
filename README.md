@@ -32,7 +32,7 @@ Generator prompt sinematik untuk model video Veo 3. Aplikasi bersifat **static**
 1. Clone repo, lalu buka `index.html` di browser mana pun.
 
 ```bash
-git clone https://github.com/username/veo3-prompt-generator.git
+git clone https://github.com/digitalkreatif-id/Veo3.git
 cd veo3-prompt-generator
 start index.html   # Windows
 # atau
@@ -47,7 +47,7 @@ Tidak ada dependensi tambahan.
 1. Pastikan struktur file seperti di atas (root).  
 2. File **.nojekyll** sudah ada untuk menonaktifkan Jekyll.  
 3. Push → Settings → Pages → *Branch*: `main` dan *Folder*: `/ (root)` → Save.  
-4. Tunggu ~1 menit, situs tersedia di `https://username.github.io/repo-name/`.
+4. Tunggu ~1 menit, situs tersedia di `https://github.com/digitalkreatif-id/Veo3`.
 
 ---
 
