@@ -30,7 +30,10 @@ function buildIndoPrompt(values) {
     negative,
   } = values;
 
-  return `Scene \"${judul}\": ${deskripsi}. Suara karakter: ${suaraKarakter}. Aksi: ${aksiKarakter}. Ekspresi: ${ekspresiKarakter}. Latar: ${latar}. Visual: ${visual}. Gerakan kamera: ${kameraID}. Suasana: ${suasana}. Ambience: ${ambience}. Dialog: \"${dialog}\". Negative prompt: ${negative}.`;
+  const kameraIDStr = Array.isArray(kameraID) ? kameraID.join(', ') : kameraID;
+  const kameraENStr = Array.isArray(kameraEN) ? kameraEN.join(', ') : kameraEN;
+
+  return `Scene \"${judul}\": ${deskripsi}. Suara karakter: ${suaraKarakter}. Aksi: ${aksiKarakter}. Ekspresi: ${ekspresiKarakter}. Latar: ${latar}. Visual: ${visual}. Gerakan kamera: ${kameraIDStr}. Suasana: ${suasana}. Ambience: ${ambience}. Dialog: \"${dialog}\". Negative prompt: ${negative}.`;
 }
 
 // Build English prompt template (will be filled after translation)
@@ -44,14 +47,16 @@ function buildEnglishPrompt(trans) {
     latar,
     visual,
     kameraID,
-    kameraEN = '',
+    kameraEN,
     suasana,
     ambience,
     dialog, // keep Indonesian dialog
     negative,
   } = trans;
 
-  return `Scene \"${judul}\": ${deskripsi}. Character voice: ${suaraKarakter}. Action: ${aksiKarakter}. Expression: ${ekspresiKarakter}. Setting: ${latar}. Visuals: ${visual}. Camera movement: ${kameraEN}. Mood: ${suasana}. Ambience: ${ambience}. Dialog (Indonesian): \"${dialog}\". Negative prompt: ${negative}.`;
+  const kameraENStr = Array.isArray(kameraEN) ? kameraEN.join(', ') : kameraEN;
+
+  return `Scene \"${judul}\": ${deskripsi}. Character voice: ${suaraKarakter}. Action: ${aksiKarakter}. Expression: ${ekspresiKarakter}. Setting: ${latar}. Visuals: ${visual}. Camera movement: ${kameraENStr}. Mood: ${suasana}. Ambience: ${ambience}. Dialog (Indonesian): \"${dialog}\". Negative prompt: ${negative}.`;
 }
 
 // Capture DOM elements
@@ -144,7 +149,7 @@ const cameraOptions = [
 // Populate the select element with the camera options
 function populateCameraSelect() {
   // Add placeholder option first
-  elements.kamera.innerHTML = '<option value="" disabled selected>Pilih gerakan kamera</option>';
+  elements.kamera.innerHTML = '<option value="" disabled>Pilih gerakan kamera</option>';
   cameraOptions.forEach((opt) => {
     const option = document.createElement('option');
     option.value = opt.id; // Indonesian version stored as value
@@ -167,8 +172,8 @@ function collectValues() {
     ekspresiKarakter: elements.ekspresiKarakter.value.trim(),
     latar: elements.latar.value.trim(),
     visual: elements.visual.value.trim(),
-    kameraID: elements.kamera.value,
-    kameraEN: elements.kamera.options[elements.kamera.selectedIndex]?.dataset?.en || '',
+    kameraID: Array.from(elements.kamera.selectedOptions).map(o => o.value),
+    kameraEN: Array.from(elements.kamera.selectedOptions).map(o => o.dataset.en),
     suasana: elements.suasana.value.trim(),
     ambience: elements.ambience.value.trim(),
     dialog: elements.dialog.value.trim(),
