@@ -1,6 +1,6 @@
 # Veo 3 Consistent Character Prompt Generator
 
-Generator prompt sinematik untuk model video **Veo 3**. Aplikasi bersifat **static** (HTML + Tailwind CSS + Vanilla JS) sehingga dapat dijalankan secara lokal maupun dipublikasikan melalui GitHub Pages tanpa server backend.
+Generator prompt untuk model video **Veo 3**. Aplikasi bersifat **static** (HTML + Tailwind CSS + Vanilla JS) sehingga dapat dijalankan secara lokal maupun dipublikasikan melalui GitHub Pages tanpa server backend.
 
 ---
 
