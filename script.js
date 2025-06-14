@@ -1,14 +1,14 @@
-// Utility: Simple API-based translator (Google Translate unofficial endpoint)
-async function translateText(text, from = 'id', to = 'en') {
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+// Utility: Translate text using MyMemory API (supports CORS)
+async function translateText(text) {
+  if (!text) return '';
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=id|en`;
   try {
     const res = await fetch(url);
     const data = await res.json();
-    // data[0] is an array of [translatedText, originalText, ...]
-    return data[0].map((d) => d[0]).join('');
+    return (data.responseData && data.responseData.translatedText) || text;
   } catch (err) {
     console.error('Translation error:', err);
-    return '[Translation failed] ' + text;
+    return text; // Fallback original
   }
 }
 
@@ -22,14 +22,15 @@ function buildIndoPrompt(values) {
     ekspresiKarakter,
     latar,
     visual,
-    kamera,
+    kameraID,
+    kameraEN,
     suasana,
     ambience,
     dialog,
     negative,
   } = values;
 
-  return `Scene \"${judul}\": ${deskripsi}. Suara karakter: ${suaraKarakter}. Aksi: ${aksiKarakter}. Ekspresi: ${ekspresiKarakter}. Latar: ${latar}. Visual: ${visual}. Gerakan kamera: ${kamera}. Suasana: ${suasana}. Ambience: ${ambience}. Dialog: \"${dialog}\". Negative prompt: ${negative}.`;
+  return `Scene \"${judul}\": ${deskripsi}. Suara karakter: ${suaraKarakter}. Aksi: ${aksiKarakter}. Ekspresi: ${ekspresiKarakter}. Latar: ${latar}. Visual: ${visual}. Gerakan kamera: ${kameraID}. Suasana: ${suasana}. Ambience: ${ambience}. Dialog: \"${dialog}\". Negative prompt: ${negative}.`;
 }
 
 // Build English prompt template (will be filled after translation)
@@ -42,14 +43,15 @@ function buildEnglishPrompt(trans) {
     ekspresiKarakter,
     latar,
     visual,
-    kamera,
+    kameraID,
+    kameraEN = '',
     suasana,
     ambience,
     dialog, // keep Indonesian dialog
     negative,
   } = trans;
 
-  return `Scene \"${judul}\": ${deskripsi}. Character voice: ${suaraKarakter}. Action: ${aksiKarakter}. Expression: ${ekspresiKarakter}. Setting: ${latar}. Visuals: ${visual}. Camera movement: ${kamera}. Mood: ${suasana}. Ambience: ${ambience}. Dialog (Indonesian): \"${dialog}\". Negative prompt: ${negative}.`;
+  return `Scene \"${judul}\": ${deskripsi}. Character voice: ${suaraKarakter}. Action: ${aksiKarakter}. Expression: ${ekspresiKarakter}. Setting: ${latar}. Visuals: ${visual}. Camera movement: ${kameraEN}. Mood: ${suasana}. Ambience: ${ambience}. Dialog (Indonesian): \"${dialog}\". Negative prompt: ${negative}.`;
 }
 
 // Capture DOM elements
@@ -145,9 +147,9 @@ function populateCameraSelect() {
   elements.kamera.innerHTML = '<option value="" disabled selected>Pilih gerakan kamera</option>';
   cameraOptions.forEach((opt) => {
     const option = document.createElement('option');
-    const label = `${opt.en} (${opt.id})`;
-    option.value = label;
-    option.textContent = label;
+    option.value = opt.id; // Indonesian version stored as value
+    option.textContent = `${opt.en} (${opt.id})`;
+    option.dataset.en = opt.en; // store English variant
     elements.kamera.appendChild(option);
   });
 }
@@ -165,7 +167,8 @@ function collectValues() {
     ekspresiKarakter: elements.ekspresiKarakter.value.trim(),
     latar: elements.latar.value.trim(),
     visual: elements.visual.value.trim(),
-    kamera: elements.kamera.value,
+    kameraID: elements.kamera.value,
+    kameraEN: elements.kamera.options[elements.kamera.selectedIndex]?.dataset?.en || '',
     suasana: elements.suasana.value.trim(),
     ambience: elements.ambience.value.trim(),
     dialog: elements.dialog.value.trim(),
@@ -183,7 +186,7 @@ async function handleGenerate() {
   // Translate each field except dialog
   const transPromises = Object.entries(values).map(async ([key, val]) => {
     if (key === 'dialog') return [key, val]; // keep original
-    if (key === 'kamera') return [key, val]; // camera already English/Indo combined
+    if (key === 'kameraID' || key === 'kameraEN') return [key, val];
     const translated = await translateText(val);
     return [key, translated];
   });
